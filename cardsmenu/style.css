@@ -33,6 +33,7 @@ ul.menubar li.active{
 ul.menubar li:hover{
     background-color: white;
     border: solid 1px var(--border);
+    cursor: pointer;
 
     
 }
