@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="../main.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <ul class="menubar">
+            <li class="active"><img src="../assets/alert-triangle.svg"></svg>Problems</li>
+            <li><img src="../assets/bell.svg"></svg>Notifications</li>
+            <li><img src="../assets/terminal.svg"></svg>Terminal</li>
+        </ul>
+    </body>
+    <script>
+        document.querySelectorAll(".menubar li").forEach(function(item) {
+            item.addEventListener("click", function() {
+                // Verwijder de 'active' klasse van alle lijstitems
+                document.querySelectorAll(".menubar li").forEach(function(li) {
+                    li.classList.remove("active");
+                });
+    
+                // Voeg de 'active' klasse toe aan het aangeklikte item
+                this.classList.add("active");
+            });
+        });
+    </script>
+    
+</html>
