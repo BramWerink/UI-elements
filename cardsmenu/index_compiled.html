@@ -16,7 +16,6 @@
     --body:#3D4144;
 }
 
-        /* Inline CSS for the menubar */
         body {
             font-family: "Inter", serif;
         }
@@ -66,25 +65,21 @@
     </ul>
 
     <script>
-        // Inline JavaScript for the menubar functionality
         document.addEventListener("DOMContentLoaded", () => {
             const menuItems = document.querySelectorAll("ul.menubar li");
             let activeIndex = 0;
 
-            // Function to set the active state
             function setActiveItem(index) {
                 menuItems.forEach(item => item.classList.remove("active"));
                 menuItems[index].classList.add("active");
             }
 
-            // Initially set the first item as active
             setActiveItem(activeIndex);
 
-            // Switch active state every 1 second
             setInterval(() => {
-                activeIndex = (activeIndex + 1) % menuItems.length; // Loop through items
+                activeIndex = (activeIndex + 1) % menuItems.length; 
                 setActiveItem(activeIndex);
-            }, 1000); // 1 second interval
+            }, 1000); 
         });
     </script>
 </body>
