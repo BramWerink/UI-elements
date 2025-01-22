@@ -1,11 +1,17 @@
-document.querySelectorAll(".menubar li").forEach(function(item) {
-    item.addEventListener("click", function() {
-        // Verwijder de 'active' klasse van alle lijstitems
-        document.querySelectorAll(".menubar li").forEach(function(li) {
-            li.classList.remove("active");
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    const menuItems = document.querySelectorAll("ul.menubar li");
+    let activeIndex = 0;
 
-        // Voeg de 'active' klasse toe aan het aangeklikte item
-        this.classList.add("active");
-    });
+    function setActiveItem(index) {
+        menuItems.forEach(item => item.classList.remove("active"));
+        
+        menuItems[index].classList.add("active");
+    }
+
+    setActiveItem(activeIndex);
+
+    setInterval(() => {
+        activeIndex = (activeIndex + 1) % menuItems.length; 
+        setActiveItem(activeIndex);
+    }, 1000); 
 });
