@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Menubar</title>
+    <style>
+
+:root{
+    --contrast0:#FFFFFF;
+    --contrast1:#F5F5F5;
+    --constrast2:#EBEBEB;
+    --constrast3:#E1E1E1;
+    --main:#000000;
+    --border:#DDDDDF;
+    --body:#3D4144;
+}
+
+        body {
+            font-family: "Inter", serif;
+        }
+
+        ul.menubar {
+            background-color: var(--contrast1);
+            border-radius: 1rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+        }
+
+        ul.menubar li {
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 300ms ease-in-out;
+            border: solid 1px var(--contrast1);
+            opacity: 0.5;
+            transform: scale(1);
+        }
+
+        ul.menubar li.active {
+            background-color: var(--contrast0);
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        ul.menubar li:hover {
+            background-color: white;
+            border: solid 1px var(--border);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <ul class="menubar">
+        <li class="active"><img src="../assets/alert-triangle.svg">Problems</li>
+        <li><img src="../assets/bell.svg">Notifications</li>
+        <li><img src="../assets/terminal.svg">Terminal</li>
+    </ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuItems = document.querySelectorAll("ul.menubar li");
+            let activeIndex = 0;
+
+            function setActiveItem(index) {
+                menuItems.forEach(item => item.classList.remove("active"));
+                menuItems[index].classList.add("active");
+            }
+
+            setActiveItem(activeIndex);
+
+            setInterval(() => {
+                activeIndex = (activeIndex + 1) % menuItems.length; 
+                setActiveItem(activeIndex);
+            }, 1000); 
+        });
+    </script>
+</body>
+</html>
