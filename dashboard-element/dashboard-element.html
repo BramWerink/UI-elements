@@ -158,7 +158,7 @@
     </div>
     
     <script>
-        function animateProgress(doneId, totalId, barClass, totalBars) {
+        function animateProgress(doneId, totalId, barClass) {
             const total = parseInt(document.getElementById(totalId).innerText);
             const doneElement = document.getElementById(doneId);
             const bar = document.querySelector(`.${barClass}`);
@@ -168,7 +168,7 @@
             let percentage = Math.round((current / total) * 100);
             bar.style.width = percentage + '%';
             percentageText.innerText = percentage + '%';
-        
+
             setInterval(() => {
                 let randomChange = Math.floor(Math.random() * 11) - 5; // Random change between -5 and 5
                 current = Math.max(0, Math.min(total, current + randomChange)); // Keep it within bounds
@@ -178,37 +178,14 @@
                 percentage = Math.round((current / total) * 100);
                 bar.style.width = percentage + '%';
                 percentageText.innerText = percentage + '%';
-        
-                // Update the remaining bars based on the total width
-                let totalWidth = 100;
-                let totalPercentage = 0;
-                for (let i = 1; i <= totalBars; i++) {
-                    let currentBar = document.querySelector(`.bar${i}`);
-                    let doneElement = document.getElementById(`done${i}`);
-                    let totalElement = document.getElementById(`total${i}`);
-                    let total = parseInt(totalElement.innerText);
-                    let done = parseInt(doneElement.innerText);
-                    let percentage = Math.round((done / total) * 100);
-                    
-                    if (i === 1) {
-                        currentBar.style.width = percentage + '%';
-                        totalPercentage = percentage;
-                    } else {
-                        let remainingWidth = Math.max(0, totalWidth - totalPercentage); // Calculate remaining width
-                        currentBar.style.width = remainingWidth + '%';
-                        totalPercentage += percentage;
-                    }
-                }
             }, 1000); // Update every 1 second
         }
-    
+
         document.addEventListener('DOMContentLoaded', () => {
-            animateProgress('done1', 'total1', 'primary', 2);
-            animateProgress('done2', 'total2', 'secondary', 2);
+            animateProgress('done1', 'total1', 'primary');
+            animateProgress('done2', 'total2', 'secondary');
         });
     </script>
-    
-    
     
 </body>
 </html>
