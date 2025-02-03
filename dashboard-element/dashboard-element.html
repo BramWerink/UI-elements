@@ -21,8 +21,8 @@
         }
 
         .dashboard-wrapper svg {
-            min-width: 1rem;
-            min-height: 1rem;
+            min-width: 1rem!important;
+            min-height: 1rem!important;
             color: black;
         }
 
@@ -160,7 +160,7 @@
     </div>
     
     <script>
-  function animateProgress(doneId, totalId, barClass, subtractor = 0) {
+ function animateProgress(doneId, totalId, barClass, subtractor = 0) {
     const total = parseInt(document.getElementById(totalId).innerText);
     const doneElement = document.getElementById(doneId);
     const bar = document.querySelector(`.${barClass}`);
@@ -168,7 +168,7 @@
 
     let current = parseInt(doneElement.innerText);
     let percentage = Math.round((current / total) * 100);
-    
+
     // Bereken de breedte zonder de getoonde tekst te beïnvloeden
     let adjustedWidth = Math.max(0, percentage - subtractor);
 
@@ -177,7 +177,7 @@
 
     setInterval(() => {
         let randomChange = Math.floor(Math.random() * 11) - 5;
-        current = Math.max(0, Math.min(total, current + randomChange));
+        current = Math.max(10, Math.min(total, current + randomChange));  // Zorgt ervoor dat de waarde niet onder 10 komt
         doneElement.innerText = current;
 
         percentage = Math.round((current / total) * 100);
@@ -192,10 +192,31 @@ document.addEventListener('DOMContentLoaded', () => {
     animateProgress('done1', 'total1', 'primary');
 
     setTimeout(() => {
-        const primaryWidth = parseFloat(document.querySelector('.primary').style.width);
-        animateProgress('done2', 'total2', 'secondary', primaryWidth);
+        const primaryPercentage = Math.round((parseInt(document.getElementById('done1').innerText) / parseInt(document.getElementById('total1').innerText)) * 100);
+        // Start animatie voor de tweede balk met de aanpassing van de eerste balk
+        animateProgress('done2', 'total2', 'secondary', primaryPercentage);
+
+        // Zorg ervoor dat de breedte van de tweede balk nooit onder de breedte van de eerste balk komt
+        const primaryWidth = Math.round((primaryPercentage / 100) * 100);  // Absolute breedte van de eerste balk
+        const secondaryBar = document.querySelector('.secondary');
+        const secondaryWidth = Math.round((parseInt(document.getElementById('done2').innerText) / parseInt(document.getElementById('total2').innerText)) * 100);
+
+        // Zorg ervoor dat de breedte van de tweede balk nooit minder dan 25% is
+        const minSecondaryWidth = 35; // Minimum van 25% voor de tweede balk
+        const finalSecondaryWidth = Math.max(minSecondaryWidth, secondaryWidth);
+
+        if (finalSecondaryWidth < primaryWidth) {
+            const newSecondaryWidth = primaryWidth;  // Zorg ervoor dat de tweede balk minimaal zo breed is als de eerste
+            secondaryBar.style.width = newSecondaryWidth + '%';
+            secondaryBar.querySelector('.percentage').innerText = newSecondaryWidth + '%';
+        } else {
+            secondaryBar.style.width = finalSecondaryWidth + '%';
+            secondaryBar.querySelector('.percentage').innerText = finalSecondaryWidth + '%';
+        }
+
     }, 500);
 });
+
 
     </script>
     
