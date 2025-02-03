@@ -5,26 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard element</title>
     <style>
-        .dashboard-wrapper{
-            width: 500px;
+        .dashboard-wrapper {
             background: white;
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            padding: 1rem;
+            width: 90%;
+            max-width: 480px;
+            border-radius: 2rem;
         }
 
-        .dashboard-wrapper p{
+        .dashboard-wrapper p {
             margin: 0;
         }
 
-        .dashboard-wrapper svg{
+        .dashboard-wrapper svg {
             width: 1rem;
             height: 1rem;
+            color: black;
         }
 
-        
-        
-        .dashboard-wrapper .progress-bar{
+        .dashboard-wrapper .progress-bar {
             width: 100%;
             background: white;
             height: 2rem;
@@ -37,64 +39,64 @@
             position: relative;
         }
 
-        .dashboard-wrapper .progress-bar .bar{
+        .dashboard-wrapper .progress-bar .bar {
             height: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 1rem;
+            transition: width 1s ease-in-out; /* Smooth transition for width */
         }
 
-        .dashboard-wrapper .progress-bar .bar.primary{
+        .dashboard-wrapper .progress-bar .bar.primary {
             background: #FE5F48;
             position: relative;
         }
 
-        .dashboard-wrapper .progress-bar .bar .percentage{
+        .dashboard-wrapper .progress-bar .bar .percentage {
             margin: 0;
-            color: white;
+            color: black;
         }
 
-        
-        .dashboard-wrapper .progress-bar .bar.secondary{
+        .dashboard-wrapper .progress-bar .bar.secondary {
             background: #FE5F48;
             opacity: .5;
         }
 
-        .dashboard-wrapper .progress-bar .bar.tertiary{
+        .dashboard-wrapper .progress-bar .bar.tertiary {
             flex: 1;
             background: repeating-linear-gradient(
-    -45deg,
-    #d4d4d4,
-    #d4d4d4 5px,
-    #ffffff 5px,
-    #ffffff 10px
-  );
+                -45deg,
+                #d4d4d4,
+                #d4d4d4 5px,
+                #ffffff 5px,
+                #ffffff 10px
+            );
             position: relative;
         }
 
-        .dashboard-wrapper .columns{
+        .dashboard-wrapper .columns {
             display: flex;
             flex-direction: row;
-            justify-content:space-between;
+            justify-content: space-between;
             gap: 1rem;
         }
 
-        .dashboard-wrapper .column{
+        .dashboard-wrapper .column {
             flex: 1;
-            background:#F2F2F2;
+            background: #F2F2F2;
             border-radius: 1rem;
             padding: 1rem;
         }
 
-        .dashboard-wrapper .column .top{
+        .dashboard-wrapper .column .top {
             display: flex;
             flex-direction: row;
             gap: 1rem;
             align-items: center;
         }
 
-        .dashboard-wrapper .column .top .icon{
+        .dashboard-wrapper .column .top .icon {
             width: 2rem;
             height: 2rem;
             background: white;
@@ -104,21 +106,18 @@
             align-items: center;
         }
 
-        .dashboard-wrapper .column .counter{
+        .dashboard-wrapper .column .counter {
             padding-top: 1rem;
         }
 
-        .dashboard-wrapper .column .counter span.done{
+        .dashboard-wrapper .column .counter span.done {
             min-width: 2ch;
             display: inline-block;
         }
 
-        .dashboard-wrapper .column .counter span.total{
+        .dashboard-wrapper .column .counter span.total {
             opacity: .5;
         }
-        
-
-        
     </style>
 </head>
 <body>
@@ -159,58 +158,57 @@
     </div>
     
     <script>
-        function animateProgress(doneId, totalId, barClass, callback) {
-    const total = parseInt(document.getElementById(totalId).innerText);
-    const doneElement = document.getElementById(doneId);
-    const bar = document.querySelector(`.${barClass}`);
-    const percentageText = bar.querySelector('.percentage');
-    
-    let current = 0;
-    let target = parseInt(doneElement.innerText);
-    let percentage = 0;
-    let step = Math.max(1, Math.ceil(target / 100)); // Slower increment steps
-    
-    function updateProgress() {
-        if (current < target) {
-            current = Math.min(current + step, target);
-            percentage = Math.round((current / total) * 100);
-            doneElement.innerText = current;
-            percentageText.innerText = percentage + '%';
+        function animateProgress(doneId, totalId, barClass, totalBars) {
+            const total = parseInt(document.getElementById(totalId).innerText);
+            const doneElement = document.getElementById(doneId);
+            const bar = document.querySelector(`.${barClass}`);
+            const percentageText = bar.querySelector('.percentage');
+            
+            let current = parseInt(doneElement.innerText);
+            let percentage = Math.round((current / total) * 100);
             bar.style.width = percentage + '%';
-
-            if (callback) callback(); // Update the third bar after both calculations
-
-            setTimeout(updateProgress, 30);
+            percentageText.innerText = percentage + '%';
+        
+            setInterval(() => {
+                let randomChange = Math.floor(Math.random() * 11) - 5; // Random change between -5 and 5
+                current = Math.max(0, Math.min(total, current + randomChange)); // Keep it within bounds
+                doneElement.innerText = current;
+                
+                // Calculate the new percentage and update smoothly
+                percentage = Math.round((current / total) * 100);
+                bar.style.width = percentage + '%';
+                percentageText.innerText = percentage + '%';
+        
+                // Update the remaining bars based on the total width
+                let totalWidth = 100;
+                let totalPercentage = 0;
+                for (let i = 1; i <= totalBars; i++) {
+                    let currentBar = document.querySelector(`.bar${i}`);
+                    let doneElement = document.getElementById(`done${i}`);
+                    let totalElement = document.getElementById(`total${i}`);
+                    let total = parseInt(totalElement.innerText);
+                    let done = parseInt(doneElement.innerText);
+                    let percentage = Math.round((done / total) * 100);
+                    
+                    if (i === 1) {
+                        currentBar.style.width = percentage + '%';
+                        totalPercentage = percentage;
+                    } else {
+                        let remainingWidth = Math.max(0, totalWidth - totalPercentage); // Calculate remaining width
+                        currentBar.style.width = remainingWidth + '%';
+                        totalPercentage += percentage;
+                    }
+                }
+            }, 1000); // Update every 1 second
         }
-    }
-    updateProgress();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    let primaryPercentage = 0;
-    let secondaryPercentage = 0;
-
-    animateProgress('done1', 'total1', 'primary', () => {
-        primaryPercentage = parseFloat(document.querySelector('.primary').style.width);
-        updateTertiaryBar();
-    });
-
-    animateProgress('done2', 'total2', 'secondary', () => {
-        secondaryPercentage = parseFloat(document.querySelector('.secondary').style.width);
-        updateTertiaryBar();
-    });
-
-    function updateTertiaryBar() {
-        const tertiaryBar = document.querySelector('.tertiary');
-        if (primaryPercentage > 0 && secondaryPercentage > 0) {
-            let tertiaryWidth = 100 - primaryPercentage - secondaryPercentage;
-            tertiaryBar.style.width = Math.max(0, tertiaryWidth) + '%';
-        }
-    }
-});
-
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            animateProgress('done1', 'total1', 'primary', 2);
+            animateProgress('done2', 'total2', 'secondary', 2);
+        });
     </script>
     
+    
+    
 </body>
-
 </html>
