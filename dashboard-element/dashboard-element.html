@@ -160,7 +160,7 @@
     </div>
     
     <script>
-   function animateProgress(doneId, totalId, barClass, subtractor = 0) {
+  function animateProgress(doneId, totalId, barClass, subtractor = 0) {
     const total = parseInt(document.getElementById(totalId).innerText);
     const doneElement = document.getElementById(doneId);
     const bar = document.querySelector(`.${barClass}`);
@@ -185,7 +185,7 @@
 
         bar.style.width = adjustedWidth + '%';
         percentageText.innerText = percentage + '%'; // Laat het originele percentage zien
-    }, 1000);
+    }, 3000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
